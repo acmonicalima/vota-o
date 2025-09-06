@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votação Mascote CIEP 183 João Vitta</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .voting-section { display: block; }
+        .admin-section { display: none; }
+        .hero { background: linear-gradient(to bottom, #FFD700, #FFA500); padding: 20px; border-radius: 10px; margin: 20px 0; }
+        input[type="radio"] { accent-color: #FFD700; }
+        button { background-color: #FFA500; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #FF8C00; }
+        .result { font-size: 24px; font-weight: bold; }
+        @media (min-width: 768px) { body { max-width: 500px; margin: 0 auto; } }
+        @media (max-width: 640px) {
+            img { max-width: 250px; } /* imagem menor só no celular */
+        }
+    </style>
+</head>
+<body class="bg-white p-4">
+    <div id="voting-section" class="voting-section max-w-md mx-auto">
+        <div class="hero text-center text-black">
+            <h1 class="text-2xl md:text-3xl font-bold mb-4">Vote no Nome do Novo Mascote do CIEP 183 João Vitta</h1>
+            <div class="mb-6">
+                <!-- imagem na raiz do GitHub -->
+                <img src="mascote.jpeg" alt="Mascote CIEP 183 João Vitta" class="w-full max-w-xs mx-auto" />
+            </div>
+            <p class="text-base md:text-lg mb-6">
+                Esta imagem representa o espírito vibrante do CIEP 183 João Vitta.
+                O Jornalista João Vitta dirigia um fusca amarelo em busca de suas reportagens.
+                Inspirado nesta ideia criamos "Elel..." Mas precisamos que você nos ajude.
+                Vote no nome que mais combina com ele!
+            </p>
+            <a href="index.html#admin" target="_blank" class="text-sm text-blue-500 underline">Acesso Admin (Nova Aba)</a>
+        </div>
+        <form id="vote-form" class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4 text-center">Escolha o melhor nome para o mascote:</h2>
+            <div class="mb-4">
+                <label class="block text-gray-700">
+                    <input type="radio" name="mascot" value="Jotinha" class="mr-2"> Jotinha
+                </label>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">
+                    <input type="radio" name="mascot" value="Farol" class="mr-2"> Farol
+                </label>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">
+                    <input type="radio" name="mascot" value="Amarelinho" class="mr-2"> Amarelinho
+                </label>
+            </div>
+            <button type="button" id="vote-btn" class="w-full mt-6 text-lg">Votar</button>
+        </form>
+        <div id="message" class="text-center mt-4 text-green-600"></div>
+    </div>
+
+    <div id="admin-section" class="admin-section text-center p-6">
+        <h1 class="text-3xl font-bold mb-4">Resultados da Votação (Admin)</h1>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <p class="result" id="jotinha-count">Jotinha: 0</p>
+            <p class="result" id="farol-count">Farol: 0</p>
+            <p class="result" id="amarelinho-count">Amarelinho: 0</p>
+        </div>
+        <a href="index.html" class="mt-6 text-blue-500 underline">Voltar à Votação</a>
+    </div>
+
+    <script>
+        // Verificar se é admin via hash
+        function checkAdmin() {
+            if (window.location.hash === '#admin') {
+                document.getElementById('voting-section').style.display = 'none';
+                document.getElementById('admin-section').style.display = 'block';
+                loadResults();
+            } else {
+                document.getElementById('voting-section').style.display = 'block';
+                document.getElementById('admin-section').style.display = 'none';
+            }
+        }
+        window.addEventListener('load', checkAdmin);
+        window.addEventListener('hashchange', checkAdmin);
+
+        // Carregar resultados
+        function loadResults() {
+            const jotinha = parseInt(localStorage.getItem('jotinha') || 0);
+            const farol = parseInt(localStorage.getItem('farol') || 0);
+            const amarelinho = parseInt(localStorage.getItem('amarelinho') || 0);
+            document.getElementById('jotinha-count').textContent = 'Jotinha: ' + jotinha;
+            document.getElementById('farol-count').textContent = 'Farol: ' + farol;
+            document.getElementById('amarelinho-count').textContent = 'Amarelinho: ' + amarelinho;
+        }
+
+        // Reset para próxima pessoa
+        function resetForNextVote() {
+            document.getElementById('vote-form').style.display = 'block';
+            document.getElementById('message').textContent = '';
+            const radios = document.querySelectorAll('input[name="mascot"]');
+            radios.forEach(r => r.checked = false);
+        }
+
+        // Votar
+        document.getElementById('vote-btn').addEventListener('click', function() {
+            const selected = document.querySelector('input[name="mascot"]:checked');
+            if (!selected) {
+                document.getElementById('message').textContent = 'Por favor, selecione um nome!';
+                return;
+            }
+            const value = selected.value;
+            const count = parseInt(localStorage.getItem(value.toLowerCase()) || 0) + 1;
+            localStorage.setItem(value.toLowerCase(), count);
+            document.getElementById('message').textContent = 'Obrigado por votar! Seu voto foi registrado.';
+            setTimeout(() => {
+                resetForNextVote();
+                document.getElementById('message').textContent = 'Pronto para o próximo voto!';
+            }, 2000);
+        });
+
+        loadResults();
+    </script>
+</body>
+</html>
