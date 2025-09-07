@@ -31,7 +31,7 @@
             <p class="text-base md:text-lg mb-6">
                 Esta imagem representa o espírito vibrante do CIEP 183 João Vitta.
                 O Jornalista João Vitta dirigia um fusca amarelo em busca de suas reportagens.
-                Inspirado nesta ideia criamos "Ele..." Mas precisamos que você nos ajude.
+                Inspirado nesta ideia criamos "Elel..." Mas precisamos que você nos ajude.
                 Vote no nome que mais combina com ele!
             </p>
             <a href="index.html#admin" target="_blank" class="text-sm text-blue-500 underline">Acesso Admin (Nova Aba)</a>
@@ -69,6 +69,9 @@
     </div>
 
     <script>
+        // Criar o objeto de som (arquivo na raiz)
+        const buzina = new Audio("buzina.wav");
+
         // Verificar se é admin via hash
         function checkAdmin() {
             if (window.location.hash === '#admin') {
@@ -108,10 +111,15 @@
                 document.getElementById('message').textContent = 'Por favor, selecione um nome!';
                 return;
             }
+
+            // tocar buzina
+            buzina.play();
+
             const value = selected.value;
             const count = parseInt(localStorage.getItem(value.toLowerCase()) || 0) + 1;
             localStorage.setItem(value.toLowerCase(), count);
             document.getElementById('message').textContent = 'Obrigado por votar! Seu voto foi registrado.';
+
             setTimeout(() => {
                 resetForNextVote();
                 document.getElementById('message').textContent = 'Pronto para o próximo voto!';
@@ -122,4 +130,3 @@
     </script>
 </body>
 </html>
-
