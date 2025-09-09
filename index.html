@@ -69,15 +69,21 @@
     </div>
 
     <script>
-        // Criar o objeto de som (arquivo buzina.wav precisa estar na raiz)
+        // Criar o objeto de som (arquivo na raiz)
         const buzina = new Audio("buzina.wav");
 
-        // Verificar se é admin via hash
+        // Verificar se é admin via hash + senha
         function checkAdmin() {
             if (window.location.hash === '#admin') {
-                document.getElementById('voting-section').style.display = 'none';
-                document.getElementById('admin-section').style.display = 'block';
-                loadResults();
+                const senha = prompt("Digite a senha de administrador:");
+                if (senha === "2307") {
+                    document.getElementById('voting-section').style.display = 'none';
+                    document.getElementById('admin-section').style.display = 'block';
+                    loadResults();
+                } else {
+                    alert("Senha incorreta! Acesso negado.");
+                    window.location.hash = ''; // volta pra votação
+                }
             } else {
                 document.getElementById('voting-section').style.display = 'block';
                 document.getElementById('admin-section').style.display = 'none';
